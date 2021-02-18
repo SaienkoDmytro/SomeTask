@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="login"
+        android:summary="Размер шрифта"
+        android:title="Текст" />
+    <CheckBoxPreference
+        android:key="enabled"
+        android:summary="Включить темную тему"
+        android:title="Тема" />
+</PreferenceScreen>

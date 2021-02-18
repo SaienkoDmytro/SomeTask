@@ -11,20 +11,41 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/editText"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:selectAllOnFocus="true"
-            android:ems="10"
-            android:autofillHints="Put some text here" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-        <Button
-            android:id="@+id/button"
+        <FrameLayout
+            android:id="@+id/fragment_container_view"
             android:layout_width="match_parent"
+            android:layout_height="400dp">
+
+        </FrameLayout>
+
+            <Button
+                android:id="@+id/buttonActivityMainFrag1"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:text="@string/fragment1" />
+
+            <Button
+                android:id="@+id/buttonActivityMainFrag2"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:text="@string/fragment2" />
+
+        <TextView
+            android:id="@+id/settingsText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="startNextActivity"
-            android:text="Send" />
+            android:textSize="18sp" />
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
