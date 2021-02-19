@@ -1,42 +1,44 @@
 package com.example.sometask;
 
 import android.app.DialogFragment;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
+//конструктор DialogFragment устарел. Замена?
 public class DialogAbout extends DialogFragment implements OnClickListener {
 
     final String LOG_TAG = "myLogs";
+    private EditText editTextDialog;
+    private DialogAboutListen listener;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getDialog().setTitle("Title!");
         View v = inflater.inflate(R.layout.dialog_about, null);
         v.findViewById(R.id.button_about).setOnClickListener(this);
-        EditText editText = v.findViewById(R.id.editTextDialogAbout);
-        String message = editText.getText().toString();
+        editTextDialog = v.findViewById(R.id.editTextDialogAbout);
         return v;
     }
 
     public void onClick(View v) {
-        Log.d(LOG_TAG, "Dialog 1: " + ((Button) v).getText());
+        String text = editTextDialog.getText().toString();
+        listener.applyText(text);
         dismiss();
     }
 
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        Log.d(LOG_TAG, "Dialog 1: onDismiss");
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        listener = (DialogAboutListen) context;
     }
 
-    public void onCancel(DialogInterface dialog) {
-        super.onCancel(dialog);
-        Log.d(LOG_TAG, "Dialog 1: onCancel");
+    // отправка текста на мейн активити через интерфейс
+    public interface DialogAboutListen {
+        void applyText(String text);
     }
 }

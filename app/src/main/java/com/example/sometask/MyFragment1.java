@@ -1,44 +1,28 @@
 package com.example.sometask;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 public class MyFragment1 extends Fragment implements View.OnClickListener {
 
-    public static final String DATA_RECEIVE = "SOME DATA";
     private static final String KEY_MSG_1 = "FRAGMENT1_MSG";
-    TextView textMsg;
+    TextView textMsg, textAction;
+    EditText editText;
 
-    DataPassListener mCallback;
+    Data1PassListener mCallback;
 
-    public interface DataPassListener{
-        void passData(String data);
-    }
-
-    @Override
-    public void onAttach(Context context)
-    {
-        super.onAttach(context);
-        // This makes sure that the host activity has implemented the callback interface
-        // If not, it throws an exception
-        try
-        {
-            mCallback = (DataPassListener) context;
-        }
-        catch (ClassCastException e)
-        {
-            throw new ClassCastException(context.toString()+ " must implement OnImageClickListener");
-        }
+    public interface Data1PassListener{
+        void pass1Data(String data);
     }
 
     @Override
@@ -46,6 +30,8 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment1, null);
         textMsg = view.findViewById(R.id.textViewFragment1ShowText);
+        textAction = view.findViewById(R.id.textViewFragment1ShowAction);
+        editText = view.findViewById(R.id.editTextFragment1EnterText);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -57,21 +43,41 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
 
         Button button1 = view.findViewById(R.id.buttonFragment1SendText);
         button1.setOnClickListener(this);
+
         return view;
     }
 
+    public void updateTextView (String textInputFrag2) {
+        textAction.setText(textInputFrag2);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof Data1PassListener) {
+            mCallback = (Data1PassListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + "must impliment Data1PassListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
 
 
     public void setMsg(String msg) {
         textMsg.setText(msg);
     }
 
-
+// не знаю верно ли добавить в онклик замену фрагмента и каким методом replace или add? или кинуть в onAttach?
     @Override
     public void onClick(View v) {
         Toast.makeText(getActivity(), "Вы нажали на кнопку",
                 Toast.LENGTH_SHORT).show();
-        mCallback.passData("Text to pass FragmentB");
-
+        String input = editText.getText().toString();
+        mCallback.pass1Data(input);
     }
 }
