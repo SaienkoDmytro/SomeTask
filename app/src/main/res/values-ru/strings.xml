@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Какое-то приложение</string>
+    <string name="fragment2">Фрагмент 2</string>
+    <string name="fragment1">Фрагмент 1</string>
+    <string name="made_by_sds">Сделано СДС</string>
+    <string name="send1">Отправить</string>
+    <string name="about">Описание</string>
+    <string name="settings">Настройки</string>
+    <string name="send2">Отправить</string>
+    <string name="text_from_edit_text1">Текст с ввода текста</string>
+    <string name="number_of_fragment1">Фрагмент 1</string>
+    <string name="send3">Отправить</string>
+    <string name="text_from_edit_text2">Текст с ввода текста</string>
+    <string name="number_of_fragment2">Фрагмент 2</string>
+    <string name="fragment_1_text">Фрагмент 1 текст</string>
+    <string name="fragment_2_text">Фрагмент 2 текст</string>
+    <string name="your_suggestions">Ваши предложения?</string>
+</resources>

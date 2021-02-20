@@ -12,7 +12,6 @@ import android.widget.EditText;
 //конструктор DialogFragment устарел. Замена?
 public class DialogAbout extends DialogFragment implements OnClickListener {
 
-    final String LOG_TAG = "myLogs";
     private EditText editTextDialog;
     private DialogAboutListen listener;
 

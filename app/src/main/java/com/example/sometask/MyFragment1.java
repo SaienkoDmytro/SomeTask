@@ -11,15 +11,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class MyFragment1 extends Fragment implements View.OnClickListener {
 
-    private static final String KEY_MSG_1 = "FRAGMENT1_MSG";
-    TextView textMsg, textAction;
-    EditText editText;
+    private static final String STATE1 = "some";
+    private static final String STATE2 = "text";
+    private TextView textAction;
+    private EditText editText;
 
-    Data1PassListener mCallback;
+    private Data1PassListener mCallback;
 
     public interface Data1PassListener{
         void pass1Data(String data);
@@ -28,27 +32,36 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment1, null);
-        textMsg = view.findViewById(R.id.textViewFragment1ShowText);
+        View view = inflater.inflate(R.layout.fragment1, container, false);
         textAction = view.findViewById(R.id.textViewFragment1ShowAction);
         editText = view.findViewById(R.id.editTextFragment1EnterText);
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String msg = bundle.getString(KEY_MSG_1);
-            if (msg != null) {
-                textMsg.setText(msg);
-            }
-        }
-
         Button button1 = view.findViewById(R.id.buttonFragment1SendText);
         button1.setOnClickListener(this);
-
         return view;
     }
 
-    public void updateTextView (String textInputFrag2) {
-        textAction.setText(textInputFrag2);
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle state1) {
+        String save1 = editText.getText().toString();
+        String save2 = textAction.getText().toString();
+        state1.putString(STATE1, save1);
+        state1.putString(STATE2, save2);
+        super.onCreate(state1);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState1) {
+        super.onCreate(savedInstanceState1);
+        if (savedInstanceState1 != null) {
+            String edit = savedInstanceState1.getString(STATE1);
+            String text = savedInstanceState1.getString(STATE2);
+            editText.setText(edit);
+            textAction.setText(text);
+        }
+    }
+
+    public void updateTextView (String textInputFrag) {
+        textAction.setText(textInputFrag);
     }
 
     @Override
@@ -68,15 +81,9 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
     }
 
 
-    public void setMsg(String msg) {
-        textMsg.setText(msg);
-    }
-
 // не знаю верно ли добавить в онклик замену фрагмента и каким методом replace или add? или кинуть в onAttach?
     @Override
     public void onClick(View v) {
-        Toast.makeText(getActivity(), "Вы нажали на кнопку",
-                Toast.LENGTH_SHORT).show();
         String input = editText.getText().toString();
         mCallback.pass1Data(input);
     }
