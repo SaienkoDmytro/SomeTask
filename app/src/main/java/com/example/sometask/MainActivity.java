@@ -46,9 +46,11 @@ public class MainActivity extends AppCompatActivity implements MyFragment1.Data1
         setSupportActionBar(myToolbar);
 
         // Begin the transaction
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container_view, new MainFragment());
-        ft.commit();
+        if (savedInstanceState == null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment_container_view, new MainFragment());
+            ft.commit();
+        }
 
         myFragmentManager = getSupportFragmentManager();
         myFragment1 = new MyFragment1();

@@ -60,7 +60,7 @@ public class MyFragment2 extends Fragment implements View.OnClickListener{
         if (context instanceof Data2PassListener) {
             mCallback = (Data2PassListener) context;
         } else {
-            throw new RuntimeException(context.toString() + "must impliment Data2PassListener");
+            throw new RuntimeException(context.toString() + "must implement Data2PassListener");
         }
     }
 

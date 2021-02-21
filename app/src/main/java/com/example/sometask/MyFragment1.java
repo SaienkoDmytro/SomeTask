@@ -53,14 +53,13 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
         }
     }
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         if (context instanceof Data1PassListener) {
             mCallback = (Data1PassListener) context;
         } else {
-            throw new RuntimeException(context.toString() + "must impliment Data1PassListener");
+            throw new RuntimeException(context.toString() + "must implement Data1PassListener");
         }
     }
 
