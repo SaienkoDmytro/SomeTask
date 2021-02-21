@@ -13,10 +13,6 @@
         android:text="@string/made_by_sds"
         android:textAppearance="?android:attr/textAppearanceLarge">
     </TextView>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
         <EditText
             android:id="@+id/editTextDialogAbout"
             android:layout_width="match_parent"
@@ -24,14 +20,14 @@
             android:inputType="text"
             android:selectAllOnFocus="true"
             android:hint="@string/your_suggestions"
+            android:autofillHints="@string/your_suggestions"
             android:ems="10" />
 
         <Button
             android:id="@+id/button_about"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="@string/send3">
         </Button>
-    </LinearLayout>
 </LinearLayout>

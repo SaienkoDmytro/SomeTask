@@ -54,25 +54,19 @@ public class MainActivity extends AppCompatActivity implements MyFragment1.Data1
         myFragment1 = new MyFragment1();
         myFragment2 = new MyFragment2();
 
+
 // запускаем первый фрагмент
-        button1.setOnClickListener(arg0 -> {
-
-                getSupportFragmentManager().beginTransaction()
-                        .setReorderingAllowed(true)
-                        .replace(R.id.child_fragment_container, myFragment1, TAG_1)
-                        .addToBackStack(TAG_1)
-                        .commit();
-
-        });
-
-        button2.setOnClickListener(arg0 -> {
-
-                getSupportFragmentManager().beginTransaction()
-                        .setReorderingAllowed(true)
-                        .replace(R.id.child_fragment_container, myFragment2, TAG_2)
-                        .addToBackStack(TAG_2)
-                        .commit();
-        });
+        button1.setOnClickListener(arg0 -> getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.child_fragment_container, myFragment1, TAG_1)
+                .addToBackStack(TAG_1)
+                .commit());
+// запускаем второй фрагмент
+        button2.setOnClickListener(arg0 -> getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.child_fragment_container, myFragment2, TAG_2)
+                .addToBackStack(TAG_2)
+                .commit());
 
     }
 
@@ -102,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements MyFragment1.Data1
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //не знаю способ передачи результата с фрагмента настроек кроме SharedPreferences есть варианты?
 
         SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
         if (requestCode == 1) {
@@ -124,26 +117,24 @@ public class MainActivity extends AppCompatActivity implements MyFragment1.Data1
 
     @Override
     public void pass1Data(String data) {
-            Toast.makeText(this, data,
-                    Toast.LENGTH_SHORT).show();
+            Bundle arguments = MyFragment2.createArgs(data);
+            myFragment2.setArguments(arguments);
             myFragmentManager.beginTransaction()
                     .setReorderingAllowed(true)
                     .replace(R.id.child_fragment_container, myFragment2, TAG_2)
                     .addToBackStack(TAG_2)
                     .commit();
-            myFragment2.updateTextView(data);
     }
 
     @Override
     public void pass2Data(String data) {
-        Toast.makeText(this, data,
-                Toast.LENGTH_SHORT).show();
+        Bundle arguments = MyFragment1.createArgs(data);
+        myFragment1.setArguments(arguments);
             myFragmentManager.beginTransaction()
                     .setReorderingAllowed(true)
                     .replace(R.id.child_fragment_container, myFragment1, TAG_1)
                     .addToBackStack(TAG_1)
                     .commit();
-        myFragment1.updateTextView(data);
     }
 
     @Override

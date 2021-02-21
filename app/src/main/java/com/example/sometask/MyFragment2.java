@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,16 +15,20 @@ import androidx.fragment.app.Fragment;
 
 public class MyFragment2 extends Fragment implements View.OnClickListener{
 
-    private static final String STATE1 = "text";
     private TextView textAction;
     private EditText editText;
-    private static final String STATE2 = "some";
-
+    private static final String INCOMING_TEXT_KEY = "BUNDLE_TEXT_KEY";
     private Data2PassListener mCallback;
 
 
     public interface Data2PassListener{
         void pass2Data(String data);
+    }
+
+    static Bundle createArgs(String incomingText) {
+        Bundle bundle = new Bundle();
+        bundle.putString(INCOMING_TEXT_KEY, incomingText);
+        return bundle;
     }
 
     @Override
@@ -40,25 +43,16 @@ public class MyFragment2 extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle state2) {
-        String save1 = editText.getText().toString();
-        String save2 = textAction.getText().toString();
-        state2.putString(STATE1, save1);
-        state2.putString(STATE2, save2);
-        super.onCreate(state2);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState2) {
-        super.onCreate(savedInstanceState2);
-        if (savedInstanceState2 != null) {
-            String edit = savedInstanceState2.getString(STATE1);
-            String text = savedInstanceState2.getString(STATE2);
-            editText.setText(edit);
-            textAction.setText(text);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+        String incomingText = getArguments().getString(INCOMING_TEXT_KEY);
+        if (incomingText != null) {
+            textAction.setText(incomingText);
+        }
         }
     }
-
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -75,11 +69,6 @@ public class MyFragment2 extends Fragment implements View.OnClickListener{
         super.onDetach();
         mCallback = null;
     }
-
-    public void updateTextView(String textInputFrag) {
-        textAction.setText(textInputFrag);
-    }
-
 
     // не знаю верно ли добавить в онклик замену фрагмента и каким методом replace или add? или кинуть в onAttach?
     @Override

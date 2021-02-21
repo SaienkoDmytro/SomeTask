@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <LinearLayout
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"
@@ -16,6 +14,7 @@
             android:layout_height="50dp"
             android:ems="10"
             android:hint="@string/fragment_1_text"
+            android:autofillHints="@string/fragment_1_text"
             android:inputType="text"
             android:selectAllOnFocus="true" />
 
@@ -37,5 +36,3 @@
             android:layout_height="50dp"
             android:text="@string/number_of_fragment1" />
     </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
