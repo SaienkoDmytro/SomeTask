@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#91d0c2">
+    android:layout_margin="10dp"
+    android:background="@color/teal_700">
 
     <FrameLayout
         android:id="@+id/child_fragment_container"

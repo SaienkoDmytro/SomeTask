@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:padding="10dp"
+    android:background="@android:color/holo_orange_light"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/editTextFragment1EnterText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/fragment_1_text"
+        android:autofillHints="@string/fragment_1_text"
+        android:inputType="text"
+        android:selectAllOnFocus="true" />
+
+    <Button
+        android:id="@+id/buttonFragment1SendText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/send1" />
+
+    <TextView
+        android:id="@+id/textViewFragment1ShowAction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_from_edit_text1" />
+
+    <TextView
+        android:id="@+id/textViewFragment1ShowText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/number_of_fragment1" />
+</LinearLayout>

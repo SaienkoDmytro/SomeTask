@@ -15,4 +15,14 @@
     <string name="fragment_1_text">Fragment 1 text</string>
     <string name="fragment_2_text">Fragment 2 text</string>
     <string name="your_suggestions">Your suggestions?</string>
+    <string name="enable">enabled</string>
+    <string name="positive">true</string>
+    <string name="return_changes">Return changes</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">OK</string>
+    <string name="light_theme">\" Light Theme\"</string>
+    <string name="dark_theme">\" Dark Theme\"</string>
+    <string name="not_set">not set</string>
+    <string name="setting_alert">Text and Theme</string>
+    <string name="alert_gone">Alert gone</string>
 </resources>

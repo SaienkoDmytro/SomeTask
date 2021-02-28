@@ -7,27 +7,26 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
 
-public class MainActivity extends AppCompatActivity implements MyFragment1.Data1PassListener, MyFragment2.Data2PassListener, DialogAbout.DialogAboutListen {
+public class MainActivity extends AppCompatActivity implements FragmentFirst.DataPassListener, FragmentSecond.DataPassListener, DialogAbout.DialogAboutListen {
 
-    public FrameLayout container;
-    private FragmentManager myFragmentManager;
-    private MyFragment1 myFragment1;
-    private MyFragment2 myFragment2;
-    private DialogAbout dlg1;
-    final static String TAG_1 = "FRAGMENT_1";
-    final static String TAG_2 = "FRAGMENT_2";
+    private FragmentFirst fragmentFirst;
+    private FragmentSecond fragmentSecond;
+    private final static String TAG_1 = "FRAGMENT_1";
+    private final static String TAG_2 = "FRAGMENT_2";
+    public final static String SHARED_PREF = "SHARED_PREF";
+    public final static String SAVE = "SAVE";
+    private final static String ENABLE = "enabled";
+    private final static String LOGIN = "login";
 
     // activity Main method
     /** Called when the activity is first created. */
@@ -36,8 +35,8 @@ public class MainActivity extends AppCompatActivity implements MyFragment1.Data1
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        container = findViewById(R.id.container);
-        dlg1 = new DialogAbout();
+        fragmentFirst = new FragmentFirst();
+        fragmentSecond = new FragmentSecond();
 
         Button button1 = findViewById(R.id.buttonActivityMainFrag1);
         Button button2 = findViewById(R.id.buttonActivityMainFrag2);
@@ -45,45 +44,56 @@ public class MainActivity extends AppCompatActivity implements MyFragment1.Data1
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        // Begin the transaction
+        // check states and saves
         if (savedInstanceState == null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment_container_view, new MainFragment());
+            ft.add(R.id.fragment_container_view, new MainFragment());
             ft.commit();
         }
 
-        myFragmentManager = getSupportFragmentManager();
-        myFragment1 = new MyFragment1();
-        myFragment2 = new MyFragment2();
+        if (loadState().equals("FRAGMENT_1")) {
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.child_fragment_container, fragmentFirst, TAG_1)
+                    .commit();
+        }
+
+        if (loadState().equals("FRAGMENT_2")) {
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.child_fragment_container, fragmentSecond, TAG_2)
+                    .commit();
+        }
 
 
-// запускаем первый фрагмент
+// create First Fragment
         button1.setOnClickListener(arg0 -> getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.child_fragment_container, myFragment1, TAG_1)
-                .addToBackStack(TAG_1)
+                .replace(R.id.child_fragment_container, fragmentFirst, TAG_1)
                 .commit());
-// запускаем второй фрагмент
+        saveState(TAG_1);
+// create Second Fragment
         button2.setOnClickListener(arg0 -> getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.child_fragment_container, myFragment2, TAG_2)
-                .addToBackStack(TAG_2)
+                .replace(R.id.child_fragment_container, fragmentSecond, TAG_2)
                 .commit());
+        saveState(TAG_2);
 
     }
 
-    // запуск фрагмента настроек
+    // create Settings fragment
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.settings_menu, menu);
         return true;
     }
-// онклик для настроек
+// Settings choser with listener on click
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
          if (item.getItemId() == R.id.action_about) {
-             dlg1.show(getFragmentManager(), "dlg1");
+             DialogAbout dialogAbout = new DialogAbout();
+             dialogAbout.show(getFragmentManager(), "dialogAbout");
              return true;
          } else if (item.getItemId() == R.id.action_settings) {
              Intent intent = new Intent(this, SettingsActivity.class);
@@ -94,56 +104,72 @@ public class MainActivity extends AppCompatActivity implements MyFragment1.Data1
              return super.onOptionsItemSelected(item);
          }
     }
-// возвращаем активити по результату с передачей изменений в строках
+// return on MainActivity for Result with showing changes in Alert
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+// get Settings changes
         SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
         if (requestCode == 1) {
-            boolean enabled = prefs.getBoolean("enabled", false);
-            String dark = " Light Theme";
+            boolean enabled = prefs.getBoolean(ENABLE, false);
+            String dark = getString(R.string.light_theme);
             if (enabled) {
-                dark = " Dark Theme";
+                dark = getString(R.string.dark_theme);
             }
-            String login = prefs.getString("login", "не установлено");
-            // закидываем изменения в алерт и выдаем на активити
+            String login = prefs.getString(LOGIN, getString(R.string.not_set));
+
+            //send them to Alert
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setTitle("Text and Theme");
+            alert.setTitle(R.string.setting_alert);
             alert.setMessage(login + dark);
-            alert.setPositiveButton("OK", (dialog, which) -> Toast.makeText(MainActivity.this, "Alert gone",
+            alert.setPositiveButton(R.string.yes, (dialog, which) -> Toast.makeText(MainActivity.this, getString(R.string.alert_gone),
                     Toast.LENGTH_SHORT).show());
             alert.create().show();
         }
     }
 
     @Override
-    public void pass1Data(String data) {
-            Bundle arguments = MyFragment2.createArgs(data);
-            myFragment2.setArguments(arguments);
-            myFragmentManager.beginTransaction()
+    public void passFirstData(String data) {
+            Bundle arguments = FragmentSecond.createArgs(data);
+            fragmentSecond.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .replace(R.id.child_fragment_container, myFragment2, TAG_2)
-                    .addToBackStack(TAG_2)
+                    .replace(R.id.child_fragment_container, fragmentSecond, TAG_2)
                     .commit();
+            saveState(TAG_2);
     }
 
     @Override
-    public void pass2Data(String data) {
-        Bundle arguments = MyFragment1.createArgs(data);
-        myFragment1.setArguments(arguments);
-            myFragmentManager.beginTransaction()
+    public void passSecondData(String data) {
+        Bundle arguments = FragmentFirst.createArgs(data);
+        fragmentFirst.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .replace(R.id.child_fragment_container, myFragment1, TAG_1)
-                    .addToBackStack(TAG_1)
+                    .replace(R.id.child_fragment_container, fragmentFirst, TAG_1)
                     .commit();
+            saveState(TAG_1);
     }
 
+    //get text from AlertDialog and show in Toast
     @Override
     public void applyText(String text) {
         if (text != null) {
             Toast.makeText(this, text,
                     Toast.LENGTH_SHORT).show();
         }
+    }
+// save Fragment on screen
+    public void saveState(String tag) {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SAVE, tag);
+        editor.apply();
+    }
+
+    // load Fragment TAG
+    public String loadState() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+        return sharedPreferences.getString(SAVE, "");
     }
 }

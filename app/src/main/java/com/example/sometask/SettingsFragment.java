@@ -16,33 +16,31 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
 
-        final CheckBoxPreference checkboxPref = getPreferenceManager().findPreference("enabled");
-  // не знаю как сделать отмену CheckBoxPreference через снекбар. enable/disable блокируют выбор и все
+        // changing Pref and showing Snack
+        final CheckBoxPreference checkboxPref = getPreferenceManager().findPreference(getString(R.string.enable));
         assert checkboxPref != null;
         checkboxPref.
                 setOnPreferenceChangeListener((preference, newValue) -> {
-                    if (newValue.toString().equals("true")) {
-                        showSnackbar(getView());
-                    } else {
-                        showSnackbar(getView());
+                    if (newValue.toString().equals(getString(R.string.positive))) {
+                        showSandbar();
                     }
-                    return true;
+                    return false;
                 });
     }
-    // делаем снекбар для оповещения
-    public static void showSnackbar(View view) {
+    // create Snackbar for changes
+    private void showSandbar() {
         Snackbar snackbar = Snackbar
-                .make(view, "Вернуть изменения", Snackbar.LENGTH_LONG)
-                .setAction("Да", view1 -> {
+                .make(requireView(), R.string.return_changes, Snackbar.LENGTH_LONG)
+                .setAction(R.string.yes, view1 -> {
                     Snackbar snackbar1 = Snackbar
-                            .make(view1, "Отменено", Snackbar.LENGTH_LONG);
+                            .make(view1, R.string.cancel, Snackbar.LENGTH_LONG);
                     snackbar1.show();
                 });
 
-        // цвет текста снека
+        // color of text
         snackbar.setActionTextColor(Color.BLUE);
 
-        // цвет кнопки снека
+        // color of button
         View sbView = snackbar.getView();
         TextView textView = sbView.findViewById(R.id.snackbar_text);
         textView.setTextColor(Color.YELLOW);

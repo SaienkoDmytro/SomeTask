@@ -13,12 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class MyFragment1 extends Fragment implements View.OnClickListener {
+public class FragmentFirst extends Fragment {
 
     private static final String INCOMING_TEXT_KEY = "BUNDLE_TEXT_KEY";
     private TextView textAction;
     private EditText editText;
-    private Data1PassListener mCallback;
+    private DataPassListener mCallback;
 
     static Bundle createArgs(String incomingText) {
         Bundle bundle = new Bundle();
@@ -26,8 +26,8 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
         return bundle;
     }
 
-    public interface Data1PassListener{
-        void pass1Data(String data);
+    public interface DataPassListener{
+        void passFirstData(String data);
     }
 
     @Override
@@ -37,7 +37,10 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
         textAction = view.findViewById(R.id.textViewFragment1ShowAction);
         editText = view.findViewById(R.id.editTextFragment1EnterText);
         Button button1 = view.findViewById(R.id.buttonFragment1SendText);
-        button1.setOnClickListener(this);
+        button1.setOnClickListener(v -> {
+            String input = editText.getText().toString();
+            mCallback.passFirstData(input);
+        });
         return view;
     }
 
@@ -56,8 +59,8 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof Data1PassListener) {
-            mCallback = (Data1PassListener) context;
+        if (context instanceof DataPassListener) {
+            mCallback = (DataPassListener) context;
         } else {
             throw new RuntimeException(context.toString() + "must implement Data1PassListener");
         }
@@ -69,9 +72,4 @@ public class MyFragment1 extends Fragment implements View.OnClickListener {
         mCallback = null;
     }
 
-    @Override
-    public void onClick(View v) {
-        String input = editText.getText().toString();
-        mCallback.pass1Data(input);
-    }
 }

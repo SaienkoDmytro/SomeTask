@@ -19,20 +19,35 @@
         <FrameLayout
             android:id="@+id/fragment_container_view"
             android:layout_width="match_parent"
-            android:layout_height="400dp">
+            android:layout_weight="5"
+            android:layout_margin="20dp"
+            android:layout_height="wrap_content">
 
         </FrameLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:padding="16dp"
+        android:orientation="horizontal">
             <Button
                 android:id="@+id/buttonActivityMainFrag1"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
                 android:text="@string/fragment1" />
 
             <Button
                 android:id="@+id/buttonActivityMainFrag2"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
                 android:text="@string/fragment2" />
+    </LinearLayout>
+
 
     </LinearLayout>
